@@ -1,5 +1,4 @@
 package test.com.csvreader;
-
 /*
  * Java CSV is a stream based library for reading and writing
  * CSV and other delimited data.
@@ -1176,6 +1175,7 @@ public class AllTests {
 	@Test
 	public void test54() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1197,10 +1197,9 @@ public class AllTests {
 
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
-
 		Assert
 		.assertEquals(
-				"\"1,2\",3,\"blah \"\"some stuff in quotes\"\"\"\r\n\"1,2\",\"3\",\"blah \"\"some stuff in quotes\"\"\"",
+				"\"1,2\",3,\"blah \"\"some stuff in quotes\"\"\"" + systemLineSeparator + "\"1,2\",\"3\",\"blah \"\"some stuff in quotes\"\"\"",
 				data);
 	}
 
@@ -1227,6 +1226,7 @@ public class AllTests {
 	@Test
 	public void test56() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, '\t', Charset
@@ -1244,12 +1244,13 @@ public class AllTests {
 				ByteBuffer.wrap(buffer)).toString();
 
 		Assert.assertEquals(
-				"1,2\t3\t\"blah \"\"some stuff in quotes\"\"\"\r\n", data);
+				"1,2\t3\t\"blah \"\"some stuff in quotes\"\"\"" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test57() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, '\t', Charset
@@ -1269,12 +1270,13 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("1,2\t3\tblah \"some stuff in quotes\"\r\n", data);
+		Assert.assertEquals("1,2\t3\tblah \"some stuff in quotes\"" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test58() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, '\t', Charset
@@ -1292,7 +1294,7 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("\"data\r\nmore data\"\t3\t3\t\" 3\t\"\r\n", data);
+		Assert.assertEquals("\"data\r\nmore data\"\t3\t3\t\" 3\t\"" + systemLineSeparator, data);
 	}
 
 	@Test
@@ -1324,6 +1326,7 @@ public class AllTests {
 	@Test
 	public void test71() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1339,7 +1342,7 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("\"data\"\r\n", data);
+		Assert.assertEquals("\"data\"" + systemLineSeparator, data);
 	}
 
 	@Test
@@ -1349,9 +1352,9 @@ public class AllTests {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
 				.forName("ISO-8859-1"));
-		Assert.assertEquals('\0', writer.getRecordDelimiter());
-		writer.setRecordDelimiter(';');
-		Assert.assertEquals(';', writer.getRecordDelimiter());
+		Assert.assertEquals("\0", writer.getRecordDelimiter());
+		writer.setRecordDelimiter(";");
+		Assert.assertEquals(";", writer.getRecordDelimiter());
 		writer.write("a;b");
 		writer.endRecord();
 		writer.close();
@@ -1368,6 +1371,7 @@ public class AllTests {
 	@Test
 	public void test73() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1394,13 +1398,14 @@ public class AllTests {
 				ByteBuffer.wrap(buffer)).toString();
 		Assert
 		.assertEquals(
-				"\"1,2\",3,\"blah \\\"some stuff in quotes\\\"\"\r\n\"1,2\",\"3\",\"blah \\\"some stuff in quotes\\\"\"",
+				"\"1,2\",3,\"blah \\\"some stuff in quotes\\\"\""+ systemLineSeparator +"\"1,2\",\"3\",\"blah \\\"some stuff in quotes\\\"\"",
 				data);
 	}
 
 	@Test
 	public void test74() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1418,12 +1423,13 @@ public class AllTests {
 
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
-		Assert.assertEquals("1\\,2,3,blah \"some stuff in quotes\"\r\n", data);
+		Assert.assertEquals("1\\,2,3,blah \"some stuff in quotes\"" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test75() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1440,7 +1446,7 @@ public class AllTests {
 
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
-		Assert.assertEquals("1\r\n#blah\r\n2\r\n", data);
+		Assert.assertEquals("1" + systemLineSeparator + "#blah" + systemLineSeparator + "2" + systemLineSeparator, data);
 	}
 
 	@Test
@@ -1720,7 +1726,7 @@ public class AllTests {
 		writer.setComment('~');
 		Assert.assertEquals('~', writer.getComment());
 
-		writer.setRecordDelimiter(';');
+		writer.setRecordDelimiter(";");
 
 		writer.write("1");
 		writer.endRecord();
@@ -1740,6 +1746,7 @@ public class AllTests {
 	@Test
 	public void test118() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, '\t', Charset
@@ -1763,13 +1770,14 @@ public class AllTests {
 
 		Assert
 		.assertEquals(
-				"1,2\t3\tblah \"some stuff in quotes\"\t\'blah \'\'some stuff in quotes\'\'\'\r\n",
+				"1,2\t3\tblah \"some stuff in quotes\"\t\'blah \'\'some stuff in quotes\'\'\'" + systemLineSeparator,
 				data);
 	}
 
 	@Test
 	public void test119() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1793,12 +1801,13 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("\"1,2\",3\r\n1,2\t3\r\n", data);
+		Assert.assertEquals("\"1,2\",3" + systemLineSeparator + "1,2\t3" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test120() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1817,13 +1826,14 @@ public class AllTests {
 		stream.close();
 		data = Charset.forName("ISO-8859-1").decode(ByteBuffer.wrap(buffer))
 				.toString();
-		Assert.assertEquals("\"1,2\"\r\n", data);
+		Assert.assertEquals("\"1,2\"" + systemLineSeparator, data);
 		writer.close();
 	}
 
 	@Test
 	public void test121() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1840,12 +1850,13 @@ public class AllTests {
 
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
-		Assert.assertEquals("1,2\r\n1,2\r\n\" 1 \",2\r\n", data);
+		Assert.assertEquals("1,2" + systemLineSeparator + "1,2" + systemLineSeparator + "\" 1 \",2" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test122() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1862,12 +1873,13 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("\"1,2\",,\"3 \"\r\n", data);
+		Assert.assertEquals("\"1,2\",,\"3 \"" + systemLineSeparator, data);
 	}
 
 	@Test
 	public void test123() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1890,8 +1902,7 @@ public class AllTests {
 
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
-
-		Assert.assertEquals("\"#123\"\r\n\\#123\r\n\\#\r\n", data);
+		Assert.assertEquals("\"#123\"" + systemLineSeparator + "\\#123" + systemLineSeparator + "\\#" + systemLineSeparator, data);
 	}
 
 	@Test
@@ -1901,7 +1912,7 @@ public class AllTests {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
 				.forName("ISO-8859-1"));
-		writer.setRecordDelimiter(';');
+		writer.setRecordDelimiter(";");
 		writer.setUseTextQualifier(false);
 		writer.setEscapeMode(CsvWriter.ESCAPE_MODE_BACKSLASH);
 
@@ -1921,6 +1932,7 @@ public class AllTests {
 	@Test
 	public void test131() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1931,7 +1943,7 @@ public class AllTests {
 		writer.write("1,\\\r\n2");
 		writer.endRecord();
 
-		writer.setRecordDelimiter(';');
+		writer.setRecordDelimiter(";");
 
 		writer.write("1,\\;2");
 		writer.endRecord();
@@ -1943,12 +1955,13 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("1\\,\\\\\\\r\\\n2\r\n1\\,\\\\\\;2;", data);
+		Assert.assertEquals("1\\,\\\\\\\r\\\n2" + systemLineSeparator + "1\\,\\\\\\;2;", data);
 	}
 
 	@Test
 	public void test132() throws Exception {
 		byte[] buffer;
+		final String systemLineSeparator = System.getProperty("line.separator");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		CsvWriter writer = new CsvWriter(stream, ',', Charset
@@ -1965,7 +1978,7 @@ public class AllTests {
 		String data = Charset.forName("ISO-8859-1").decode(
 				ByteBuffer.wrap(buffer)).toString();
 
-		Assert.assertEquals("\"1,\\\\2\"\r\n", data);
+		Assert.assertEquals("\"1,\\\\2\"" + systemLineSeparator, data);
 	}
 
 	@Test
@@ -2261,5 +2274,105 @@ public class AllTests {
 		reader.close();
 
 		new File("temp.csv").delete();
+	}
+
+	@Test
+	public void test175() throws Exception {
+		byte[] buffer;
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		CsvWriter writer = new CsvWriter(stream, ',', Charset
+				.forName("ISO-8859-1"));
+		Assert.assertEquals("\0", writer.getRecordDelimiter());
+		writer.setRecordDelimiter("\r\n");
+		Assert.assertEquals("\r\n", writer.getRecordDelimiter());
+		writer.write("test line number 1");
+		writer.endRecord();
+		writer.write("test line number 2");
+		writer.endRecord();
+		writer.close();
+
+		buffer = stream.toByteArray();
+		stream.close();
+
+		String data = Charset.forName("ISO-8859-1").decode(
+				ByteBuffer.wrap(buffer)).toString();
+
+		Assert.assertEquals("test line number 1\r\ntest line number 2\r\n", data);
+	}
+
+	@Test
+	public void test176() throws Exception {
+		byte[] buffer;
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		CsvWriter writer = new CsvWriter(stream, ',', Charset
+				.forName("ISO-8859-1"));
+		Assert.assertEquals("\0", writer.getRecordDelimiter());
+		writer.setRecordDelimiter("\r\n");
+		writer.setForceQualifier(true);
+		Assert.assertEquals("\r\n", writer.getRecordDelimiter());
+		writer.write("line 1 and column 1");
+		writer.write("line 1 and column 2");
+		writer.endRecord();
+		writer.write("line 2 and column 1");
+		writer.write("line 2 and column 2");
+		writer.endRecord();
+		writer.close();
+
+		buffer = stream.toByteArray();
+		stream.close();
+
+		String data = Charset.forName("ISO-8859-1").decode(
+				ByteBuffer.wrap(buffer)).toString();
+
+		Assert.assertEquals("\"line 1 and column 1\",\"line 1 and column 2\"\r\n\"line 2 and column 1\",\"line 2 and column 2\"\r\n", data);
+	}
+
+	@Test
+	public void test177() throws Exception {
+		byte[] buffer;
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		CsvWriter writer = new CsvWriter(stream, ',', Charset
+				.forName("ISO-8859-1"));
+		Assert.assertEquals("\0", writer.getRecordDelimiter());
+		writer.setRecordDelimiter("\r\n");
+		Assert.assertEquals("\r\n", writer.getRecordDelimiter());
+		writer.write("a\r\nb");
+		writer.endRecord();
+		writer.close();
+
+		buffer = stream.toByteArray();
+		stream.close();
+
+		String data = Charset.forName("ISO-8859-1").decode(
+				ByteBuffer.wrap(buffer)).toString();
+
+		Assert.assertEquals("\"a\r\nb\"\r\n", data);
+	}
+
+	@Test
+	public void test178() throws Exception {
+		byte[] buffer;
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		CsvWriter writer = new CsvWriter(stream, ',', Charset
+				.forName("ISO-8859-1"));
+		Assert.assertEquals("\0", writer.getRecordDelimiter());
+		writer.setRecordDelimiter("\r\n");
+		writer.setForceQualifier(true);
+		Assert.assertEquals("\r\n", writer.getRecordDelimiter());
+		writer.write("a\r\nb");
+		writer.endRecord();
+		writer.close();
+
+		buffer = stream.toByteArray();
+		stream.close();
+
+		String data = Charset.forName("ISO-8859-1").decode(
+				ByteBuffer.wrap(buffer)).toString();
+
+		Assert.assertEquals("\"a\r\nb\"\r\n", data);
 	}
 }

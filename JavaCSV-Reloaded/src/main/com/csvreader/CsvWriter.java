@@ -1,7 +1,7 @@
 /*
  * Java CSV is a stream based library for reading and writing
  * CSV and other delimited data.
- *   
+ * 
  * Copyright (C) Bruce Dunwiddie bruce@csvreader.com
  *
  * This library is free software; you can redistribute it and/or
@@ -20,11 +20,11 @@
  */
 package main.com.csvreader;
 
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.BufferedWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
@@ -33,7 +33,7 @@ import java.nio.charset.Charset;
  */
 public class CsvWriter {
 	private Writer outputStream = null;
-	
+
 	private String fileName = null;
 
 	private boolean firstColumn = true;
@@ -48,7 +48,7 @@ public class CsvWriter {
 	private boolean initialized = false;
 
 	private boolean closed = false;
-	
+
 	private String systemRecordDelimiter = System.getProperty("line.separator");
 
 	/**
@@ -155,7 +155,7 @@ public class CsvWriter {
 		userSettings.Delimiter = delimiter;
 	}
 
-	public char getRecordDelimiter() {
+	public String getRecordDelimiter() {
 		return userSettings.RecordDelimiter;
 	}
 
@@ -164,10 +164,33 @@ public class CsvWriter {
 	 * 
 	 * @param recordDelimiter
 	 *            The character to use as the record delimiter. Default is
-	 *            combination of standard end of line characters for Windows,
-	 *            Unix, or Mac.
+	 *            the operative system native line separator.
+	 * 
+	 *            <p>Note this method does not allow you to set the Windows
+	 *            native line separator as it is composed of 2 characters:
+	 *            {@code \r\n}. If you need to set this separator (e.g.: if you
+	 *            are in a Unix based operative system and need to output for
+	 *            Windows) then you will have to use
+	 *            {@link #setRecordDelimiter(String)}.</p>
+	 * 
+	 *            <p>This method was kept for compatibility with previous
+	 *            versions.</p>
 	 */
 	public void setRecordDelimiter(char recordDelimiter) {
+		setRecordDelimiter(String.valueOf(recordDelimiter));
+	}
+
+	/**
+	 * Sets the character to use as the record delimiter.
+	 * 
+	 * @param recordDelimiter
+	 *            The {@code String} to use as the record delimiter. Default is
+	 *            the operative system native line separator.
+	 * 
+	 *            </p>This method was added in version 2.2 and allows the
+	 *            delimiter to be a {@code String}.</p>
+	 */
+	public void setRecordDelimiter(String recordDelimiter) {
 		useCustomRecordDelimiter = true;
 		userSettings.RecordDelimiter = recordDelimiter;
 	}
@@ -287,13 +310,13 @@ public class CsvWriter {
 						|| (!useCustomRecordDelimiter && (content
 								.indexOf(Letters.LF) > -1 || content
 								.indexOf(Letters.CR) > -1))
-						|| (useCustomRecordDelimiter && content
-								.indexOf(userSettings.RecordDelimiter) > -1)
-						|| (firstColumn && content.length() > 0 && content
-								.charAt(0) == userSettings.Comment) ||
-				// check for empty first column, which if on its own line must
-				// be qualified or the line will be skipped
-				(firstColumn && content.length() == 0))) {
+								|| (useCustomRecordDelimiter && content
+										.indexOf(userSettings.RecordDelimiter) > -1)
+										|| (firstColumn && content.length() > 0 && content
+												.charAt(0) == userSettings.Comment) ||
+												// check for empty first column, which if on its own line must
+												// be qualified or the line will be skipped
+												(firstColumn && content.length() == 0))) {
 			textQualify = true;
 		}
 
@@ -334,8 +357,8 @@ public class CsvWriter {
 					+ Letters.BACKSLASH + userSettings.Delimiter);
 
 			if (useCustomRecordDelimiter) {
-				content = replace(content, "" + userSettings.RecordDelimiter,
-						"" + Letters.BACKSLASH + userSettings.RecordDelimiter);
+				content = replace(content, userSettings.RecordDelimiter,
+						Letters.BACKSLASH + userSettings.RecordDelimiter);
 			} else {
 				content = replace(content, "" + Letters.CR, ""
 						+ Letters.BACKSLASH + Letters.CR);
@@ -391,7 +414,7 @@ public class CsvWriter {
 		} else {
 			outputStream.write(systemRecordDelimiter);
 		}
-		
+
 		firstColumn = true;
 	}
 
@@ -412,8 +435,8 @@ public class CsvWriter {
 	public void writeRecord(String[] values, boolean preserveSpaces)
 			throws IOException {
 		if (values != null && values.length > 0) {
-			for (int i = 0; i < values.length; i++) {
-				write(values[i], preserveSpaces);
+			for (String value : values) {
+				write(value, preserveSpaces);
 			}
 
 			endRecord();
@@ -474,7 +497,7 @@ public class CsvWriter {
 	 * be written to the underlying device.
 	 * @exception IOException
 	 *                Thrown if an error occurs while writing data to the
-	 *                destination stream. 
+	 *                destination stream.
 	 */
 	public void flush() throws IOException {
 		outputStream.flush();
@@ -520,7 +543,7 @@ public class CsvWriter {
 	private void checkClosed() throws IOException {
 		if (closed) {
 			throw new IOException(
-			"This instance of the CsvWriter class has already been closed.");
+					"This instance of the CsvWriter class has already been closed.");
 		}
 	}
 
@@ -549,6 +572,7 @@ public class CsvWriter {
 		public static final char BACKSLASH = '\\';
 
 		public static final char NULL = '\0';
+
 	}
 
 	private class UserSettings {
@@ -560,7 +584,7 @@ public class CsvWriter {
 
 		public char Delimiter;
 
-		public char RecordDelimiter;
+		public String RecordDelimiter;
 
 		public char Comment;
 
@@ -572,7 +596,7 @@ public class CsvWriter {
 			TextQualifier = Letters.QUOTE;
 			UseTextQualifier = true;
 			Delimiter = Letters.COMMA;
-			RecordDelimiter = Letters.NULL;
+			RecordDelimiter = String.valueOf(Letters.NULL);
 			Comment = Letters.POUND;
 			EscapeMode = ESCAPE_MODE_DOUBLED;
 			ForceQualifier = false;
