@@ -1,0 +1,4 @@
+Version 2.2:
+ * Corrected all failing tests that where checking for "\r\n" instead of System.getProperty("line.separator")
+ * Modified the CsvWriter class so that setRecordDelimiter receives a String instead of a char
+ * Added several tests
